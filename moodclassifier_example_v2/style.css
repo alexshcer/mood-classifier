@@ -1,0 +1,157 @@
+/* General Styles */
+body {
+    background-color: #1e1e1e;
+    color: #b3b3b3;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 0% !important;
+    margin: 50% !important;
+}
+
+input#youtube-url {
+    margin-right: 15px;
+    border-radius: 100px !important;
+    height: 40px;
+}
+
+#main {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    align-items: center;
+    height: 60vh;
+    margin-top: 115px;
+    margin-left: 65px;
+    margin-right: 65px;
+}
+
+/* File Upload Area */
+.ui.action.input {
+    width: 80%;
+    border-radius: 100px !important;
+    overflow: hidden;
+}
+
+.ui.action.input input {
+    background-color: #333 !important;
+    border: none !important;
+    color: #b3b3b3 !important;
+    padding-left: 1.5rem !important;
+}
+
+.ui.button {
+    background-color: #399af7 !important;
+    color: white !important;
+    border-radius: 30px !important;
+}
+
+#file-drop-area {
+    border: 2px dashed #666;
+    border-radius: 15px;
+    background-color: #333;
+    color: #999;
+    margin-top: 2rem;
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
+    width: 80%;
+}
+
+/* Results Area */
+.classifier {
+    background-color: #333;
+    border-radius: 15px;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.classifier-meter {
+    background-color: #555;
+    border: none;
+    border-radius: 15px;
+    height: 2.2rem;
+    width: 100%;
+    position: relative;
+}
+
+.classifier-meter::before {
+    content: attr(data-classifier);
+    background-color: #399af7;
+    border-radius: 15px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--meter-width, 0%);
+}
+
+#bpm-and-key {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.row-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+#bpm-value, #key-value {
+    background-color: #333;
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    flex: 1;
+    text-align: center;
+}
+
+.tag {
+    color: #b3b3b3;
+    font-weight: normal;
+}
+
+/* Remove footer */
+footer#links {
+    display: none;
+}
+
+/* Hide template controls */
+template {
+    display: none;
+}
+
+/* Override Semantic UI defaults */
+html, body {
+    background-color: #1e1e1e !important;
+    color: #b3b3b3 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Update the input styles */
+input#youtube-url {
+    margin-right: 15px;
+    border-radius: 100px !important;
+    height: 40px;
+}
+
+button#download-youtube-audio {
+    border-radius: 100px !important;
+}
+
+/* Override Semantic UI input styles */
+.ui.action.input:not([class*="left action"])>input {
+    border-radius: 100px !important;
+    border-right-color: transparent !important;
+}
+
+/* Ensure button connects properly */
+.ui.action.input .button {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-top-right-radius: 100px !important;
+    border-bottom-right-radius: 100px !important;
+}
