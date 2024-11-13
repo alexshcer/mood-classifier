@@ -243,3 +243,10 @@ footer#links {
 [alt="Music Technology Group logo"] {
     height: 3.5rem;
 }
+
+#controls-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+}

@@ -45,8 +45,8 @@ function toggleUploadDisplayHTML(mode) {
 
             return WaveSurfer.create({
                 container: '#waveform',
-                progressColor: '#F7AF39',
-                waveColor: '#a16607'
+                progressColor: '#3a3a3a',
+                waveColor: '#fff2f2'
             });
         
         case 'upload':

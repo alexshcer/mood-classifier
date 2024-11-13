@@ -33,24 +33,34 @@
                     <div class="ui indeterminate text loader">analyzing track...</div>
                 </div>
                 <div id="danceability" class="classifier">
-                    <span>💃🏻</span>
-                    <div class="classifier-meter" data-classifier="danceability"></div>
+                    <span class="emoji">💃🏻</span>
+                    <div class="classifier-meter" data-classifier="danceability">
+                        <span>danceability</span>
+                    </div>
                 </div>
                 <div id="mood_happy" class="classifier">
-                    <span>😁</span>
-                    <div class="classifier-meter" data-classifier="happy"></div>
+                    <span class="emoji">😊</span>
+                    <div class="classifier-meter" data-classifier="happy">
+                        <span>happy</span>
+                    </div>
                 </div>
                 <div id="mood_sad" class="classifier">
-                    <span>😢</span>
-                    <div class="classifier-meter" data-classifier="sad"></div>
+                    <span class="emoji">😢</span>
+                    <div class="classifier-meter" data-classifier="sad">
+                        <span>sad</span>
+                    </div>
                 </div>
                 <div id="mood_relaxed" class="classifier">
-                    <span>😌</span>
-                    <div class="classifier-meter" data-classifier="relaxed"></div>
+                    <span class="emoji">😌</span>
+                    <div class="classifier-meter" data-classifier="relaxed">
+                        <span>relaxed</span>
+                    </div>
                 </div>
                 <div id="mood_aggressive" class="classifier">
-                    <span>👊</span>
-                    <div class="classifier-meter" data-classifier="aggressive"></div>
+                    <span class="emoji">😠</span>
+                    <div class="classifier-meter" data-classifier="aggressive">
+                        <span>aggressive</span>
+                    </div>
                 </div>
                 <div id="bpm-and-key">
                     <div id="bpm" class="row-container">
@@ -69,5 +79,28 @@
         <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia-wasm.web.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia.js-core.js"></script>
         <script src="src/main.js" type="module" async defer></script>
+
+        <template id="playback-controls"></template>
+            <div id="controls-container" class="controls" style="display: none;">
+                <button id="backward" class="ui button tiny">
+                    <i class="step backward icon"></i>
+                    Backward
+                </button>
+                <button id="play" class="ui primary button tiny">
+                    <i class="play icon"></i>
+                    Play/
+                    <i class="pause icon"></i>
+                    Pause
+                </button>
+                <button id="forward" class="ui button tiny">
+                    <i class="step forward icon"></i>
+                    Forward
+                </button>
+                <button id="mute" class="ui button tiny">
+                    <i class="volume off icon"></i>
+                    Toggle Mute
+                </button>
+            </div>
+        </template>
     </body>
 </html>

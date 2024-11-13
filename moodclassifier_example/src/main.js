@@ -50,6 +50,9 @@ document.getElementById('download-youtube-audio').addEventListener('click', () =
     }
 });
 
+// Hide controls initially
+document.getElementById('controls-container').style.display = 'none';
+
 function processDownloadedFile(filePath) {
     fetch(filePath)
         .then(response => response.arrayBuffer())
@@ -57,8 +60,7 @@ function processDownloadedFile(filePath) {
             decodeFile(arrayBuffer);
             wavesurfer = toggleUploadDisplayHTML('display');
             wavesurfer.load(filePath);
-            controls = new PlaybackControls(wavesurfer);
-            controls.toggleEnabled(false);
+            initializeControls();
         })
         .catch(error => {
             console.error('Error processing downloaded file:', error);
@@ -74,10 +76,17 @@ function processFileUpload(files) {
             decodeFile(ab);
             wavesurfer = toggleUploadDisplayHTML('display');
             wavesurfer.loadBlob(files[0]);
-            controls = new PlaybackControls(wavesurfer);
-            controls.toggleEnabled(false);
+            initializeControls();
         })
     }
+}
+
+function initializeControls() {
+    controls = new PlaybackControls(wavesurfer);
+    controls.toggleEnabled(false);
+    // Hide drop area and show controls
+    document.getElementById('file-drop-area').style.display = 'none';
+    document.getElementById('controls-container').style.display = 'flex';
 }
 
 function decodeFile(arrayBuffer) {
