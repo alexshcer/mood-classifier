@@ -60,6 +60,7 @@ function toggleUploadDisplayHTML(mode) {
 
 class PlaybackControls {
     constructor(wavesurferInstance) {
+        this.wavesurfer = wavesurferInstance;
         this.controls = {
             backward: document.querySelector('#file-select-area #backward'),
             play: document.querySelector('#file-select-area #play'),
@@ -67,11 +68,35 @@ class PlaybackControls {
             mute: document.querySelector('#file-select-area #mute')
         };
 
-        // set click handlers
-        this.controls.backward.onclick = () => { wavesurferInstance.skipBackward() };
-        this.controls.play.onclick = () => { wavesurferInstance.playPause() };
-        this.controls.forward.onclick = () => { wavesurferInstance.skipForward() };
-        this.controls.mute.onclick = () => { wavesurferInstance.toggleMute() };
+        // Set click handlers
+        this.controls.backward.onclick = () => {
+            const currentTime = this.wavesurfer.getCurrentTime();
+            this.wavesurfer.setCurrentTime(Math.max(currentTime - 5, 0));
+        };
+
+        this.controls.play.onclick = () => {
+            this.wavesurfer.playPause();
+            this.updatePlayButtonText();
+        };
+
+        this.controls.forward.onclick = () => {
+            const currentTime = this.wavesurfer.getCurrentTime();
+            const duration = this.wavesurfer.getDuration();
+            this.wavesurfer.setCurrentTime(Math.min(currentTime + 5, duration));
+        };
+
+        this.controls.mute.onclick = () => {
+            const isMuted = this.wavesurfer.getVolume() === 0;
+            this.wavesurfer.setVolume(isMuted ? 1 : 0);
+        };
+
+        // Update button text initially
+        this.updatePlayButtonText();
+    }
+
+    updatePlayButtonText() {
+        const isPlaying = this.wavesurfer.isPlaying();
+        this.controls.play.innerHTML = isPlaying ? '<i class="pause icon"></i> pause' : '<i class="play icon"></i> play';
     }
 
     toggleEnabled(isEnabled) {

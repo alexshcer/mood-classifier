@@ -33,39 +33,7 @@ dropArea.addEventListener('click', () => {
     dropInput.click();
 })
 
-document.getElementById('download-youtube-audio').addEventListener('click', () => {
-    const url = document.getElementById('youtube-url').value;
-    if (url) {
-        window.electronAPI.downloadYouTubeAudio(url)
-            .then(filePath => {
-                console.log('Audio downloaded to:', filePath);
-                // Process the downloaded audio file
-                processDownloadedFile(filePath);
-            })
-            .catch(error => {
-                console.error('Error downloading audio:', error);
-            });
-    } else {
-        alert('Please enter a valid YouTube URL.');
-    }
-});
 
-// Hide controls initially
-document.querySelector('.controls').style.display = 'none';
-
-function processDownloadedFile(filePath) {
-    fetch(filePath)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => {
-            decodeFile(arrayBuffer);
-            wavesurfer = toggleUploadDisplayHTML('display');
-            wavesurfer.load(filePath);
-            initializeControls();
-        })
-        .catch(error => {
-            console.error('Error processing downloaded file:', error);
-        });
-}
 
 function processFileUpload(files) {
     if (files.length > 1) {
@@ -76,16 +44,10 @@ function processFileUpload(files) {
             decodeFile(ab);
             wavesurfer = toggleUploadDisplayHTML('display');
             wavesurfer.loadBlob(files[0]);
-            initializeControls();
+            controls = new PlaybackControls(wavesurfer);
+            controls.toggleEnabled(false);
         })
     }
-}
-
-function initializeControls() {
-    controls = new PlaybackControls(wavesurfer);
-    controls.toggleEnabled(false);
-    // Show controls after processing starts
-    document.querySelector('.controls').style.display = 'flex';
 }
 
 function decodeFile(arrayBuffer) {

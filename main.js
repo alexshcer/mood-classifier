@@ -6,8 +6,10 @@ const ffmpeg = require('fluent-ffmpeg');
 
 function createWindow() {
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1068,
+        height: 720,
+        minWidth: 1068,
+        minHeight: 720,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -17,6 +19,14 @@ function createWindow() {
     });
 
     win.loadFile('moodclassifier_v2/index.html');
+    
+    /*
+    // Add resize event listener
+    win.on('resize', () => {
+        const [width, height] = win.getSize();
+        console.log(`Window size: ${width}x${height}`);
+    });
+    */
 }
 
 app.whenReady().then(createWindow);

@@ -64,11 +64,11 @@
                 </div>
                 <div id="bpm-and-key">
                     <div id="bpm" class="row-container">
-                        <div class="tag">bpm</div>
+                        <div class="tag">bpm: </div>
                         <div id="bpm-value"></div>
                     </div>
                     <div id="key" class="row-container">
-                        <div class="tag">key</div>
+                        <div class="tag">key: </div>
                         <div id="key-value"></div>
                     </div>
                 </div>
@@ -80,25 +80,25 @@
         <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia.js-core.js"></script>
         <script src="src/main.js" type="module" async defer></script>
 
-        <template id="playback-controls"></template>
-            <div id="controls-container" class="controls" style="display: none;">
-                <button id="backward" class="ui button tiny">
+        <template id="playback-controls">
+            <div id="controls-container" class="controls">
+                <button id="backward" class="button tiny">
                     <i class="step backward icon"></i>
-                    Backward
+                    backward
                 </button>
-                <button id="play" class="ui primary button tiny">
+                <button id="play" class="primary button tiny">
                     <i class="play icon"></i>
-                    Play/
+                    play/
                     <i class="pause icon"></i>
-                    Pause
+                    pause
                 </button>
-                <button id="forward" class="ui button tiny">
+                <button id="forward" class="button tiny">
                     <i class="step forward icon"></i>
-                    Forward
+                    forward
                 </button>
-                <button id="mute" class="ui button tiny">
+                <button id="mute" class="button tiny">
                     <i class="volume off icon"></i>
-                    Toggle Mute
+                    mute
                 </button>
             </div>
         </template>
