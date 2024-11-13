@@ -18,7 +18,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('moodclassifier_v2/index.html');
+    win.loadFile('moodclassifier_v3/index.html');
     
     /*
     // Add resize event listener
