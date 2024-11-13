@@ -4,3 +4,5 @@
 /out
 /Mood Classifier-darwin-*
 *.asar
+.DS_Store
+/.idea
