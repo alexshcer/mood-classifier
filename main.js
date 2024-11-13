@@ -97,3 +97,14 @@ ipcMain.handle('download-youtube-audio', async (event, url) => {
         return Promise.reject(new Error(`Failed to download audio: ${error.message}`));
     }
 });
+
+// Add this new IPC handler
+ipcMain.handle('read-audio-file', async (event, filePath) => {
+    try {
+        const buffer = await fs.promises.readFile(filePath);
+        return buffer;
+    } catch (error) {
+        console.error('Error reading audio file:', error);
+        throw error;
+    }
+});

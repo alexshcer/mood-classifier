@@ -36,17 +36,25 @@ dropArea.addEventListener('click', () => {
 
 
 function processFileUpload(files) {
+    console.log('Processing file upload:', files);
     if (files.length > 1) {
         alert("Only single-file uploads are supported currently");
         throw Error("Multiple file upload attempted, cannot process.");
     } else if (files.length) {
-        files[0].arrayBuffer().then((ab) => {
+        toggleLoader();
+        const file = files[0];
+        console.log('File type:', file.type);
+        file.arrayBuffer().then((ab) => {
+            console.log('ArrayBuffer obtained');
             decodeFile(ab);
             wavesurfer = toggleUploadDisplayHTML('display');
-            wavesurfer.loadBlob(files[0]);
+            wavesurfer.loadBlob(file);
             controls = new PlaybackControls(wavesurfer);
             controls.toggleEnabled(false);
-        })
+        }).catch(error => {
+            console.error('Error converting file to ArrayBuffer:', error);
+            toggleLoader();
+        });
     }
 }
 
@@ -54,8 +62,6 @@ function decodeFile(arrayBuffer) {
     audioCtx.resume().then(() => {
         audioCtx.decodeAudioData(arrayBuffer).then(async function handleDecodedAudio(audioBuffer) {
             console.info("Done decoding audio!");
-            
-            toggleLoader();
             
             const prepocessedAudio = preprocess(audioBuffer);
             await audioCtx.suspend();
@@ -65,7 +71,7 @@ function decodeFile(arrayBuffer) {
             }
 
             // reduce amount of audio to analyse
-            let audioData = shortenAudio(prepocessedAudio, KEEP_PERCENTAGE, true); // <-- TRIMMED start/end
+            let audioData = shortenAudio(prepocessedAudio, KEEP_PERCENTAGE, true);
 
             // send for feature extraction
             createFeatureExtractionWorker();
@@ -74,8 +80,11 @@ function decodeFile(arrayBuffer) {
                 audio: audioData.buffer
             }, [audioData.buffer]);
             audioData = null;
-        })
-    })
+        }).catch(error => {
+            console.error('Error decoding audio:', error);
+            toggleLoader();
+        });
+    });
 }
 
 function computeKeyBPM (audioSignal) {
@@ -160,3 +169,46 @@ window.onload = () => {
         essentia.arrayToVector = wasmModule.arrayToVector;
     })
 };
+
+document.getElementById('download-youtube-audio').addEventListener('click', async () => {
+    const url = document.getElementById('youtube-url').value;
+    if (!url) {
+        alert('Please enter a YouTube URL.');
+        return;
+    }
+
+    try {
+        console.log('Starting download...');
+        const filePath = await window.electronAPI.downloadYouTubeAudio(url);
+        console.log('Download complete:', filePath);
+
+        // Read the file using the new IPC handler
+        const fileBuffer = await window.electronAPI.readAudioFile(filePath);
+        console.log('File read into buffer');
+
+        // Create a blob from the buffer
+        const fileBlob = new Blob([fileBuffer], { type: 'audio/wav' });
+        console.log('File converted to Blob');
+
+        // Create a File object
+        const file = new File([fileBlob], 'downloaded-audio.wav', { type: 'audio/wav' });
+        
+        // Remove the drop area and process the file
+        const dropArea = document.querySelector('#file-drop-area');
+        if (dropArea) {
+            dropArea.remove();
+        }
+
+        // Process the file
+        processFileUpload([file]);
+        console.log('File sent for processing');
+    } catch (error) {
+        console.error('Error processing YouTube download:', error);
+        alert('Error processing YouTube download: ' + error.message);
+    }
+});
+
+document.getElementById('reset-app').addEventListener('click', () => {
+    // Refresh the page to reset the app
+    location.reload();
+});
