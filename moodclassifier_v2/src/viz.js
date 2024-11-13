@@ -71,7 +71,8 @@ class PlaybackControls {
         // Set click handlers
         this.controls.backward.onclick = () => {
             const currentTime = this.wavesurfer.getCurrentTime();
-            this.wavesurfer.setCurrentTime(Math.max(currentTime - 5, 0));
+            const newTime = Math.max(currentTime - 0.5, 0);
+            this.wavesurfer.seekTo(newTime / this.wavesurfer.getDuration());
         };
 
         this.controls.play.onclick = () => {
@@ -82,21 +83,29 @@ class PlaybackControls {
         this.controls.forward.onclick = () => {
             const currentTime = this.wavesurfer.getCurrentTime();
             const duration = this.wavesurfer.getDuration();
-            this.wavesurfer.setCurrentTime(Math.min(currentTime + 5, duration));
+            const newTime = Math.min(currentTime + 0.5, duration);
+            this.wavesurfer.seekTo(newTime / duration);
         };
 
         this.controls.mute.onclick = () => {
             const isMuted = this.wavesurfer.getVolume() === 0;
             this.wavesurfer.setVolume(isMuted ? 1 : 0);
+            this.updateMuteButtonIcon();
         };
 
-        // Update button text initially
+        // Update button text and icon initially
         this.updatePlayButtonText();
+        this.updateMuteButtonIcon();
     }
 
     updatePlayButtonText() {
         const isPlaying = this.wavesurfer.isPlaying();
         this.controls.play.innerHTML = isPlaying ? '<i class="pause icon"></i> pause' : '<i class="play icon"></i> play';
+    }
+
+    updateMuteButtonIcon() {
+        const isMuted = this.wavesurfer.getVolume() === 0;
+        this.controls.mute.innerHTML = isMuted ? '<i class="volume off icon"></i> mute' : '<i class="volume up icon"></i> mute';
     }
 
     toggleEnabled(isEnabled) {
