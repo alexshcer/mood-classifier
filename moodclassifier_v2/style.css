@@ -54,7 +54,7 @@ body {
 }
 
 #file-drop-area {
-    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     background: linear-gradient(145deg, #2c2c2c, #242424);
     color: #ccc;
@@ -67,7 +67,7 @@ body {
     width: 100%;
     box-sizing: border-box;
     font-size: 1.2rem;
-    transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
@@ -76,16 +76,13 @@ body {
     background: linear-gradient(145deg, #333, #2a2a2a);
     color: #fff;
     border-color: rgba(255, 255, 255, 0.5);
-    transform: scale(1.02);
 }
 
 #file-drop-area span {
     font-weight: 500;
-    transition: transform 0.3s;
 }
 
 #file-drop-area:hover span {
-    transform: scale(1.1);
 }
 
 /* Results Area */
