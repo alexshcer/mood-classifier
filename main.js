@@ -16,7 +16,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('moodclassifier_example/index.html');
+    win.loadFile('moodclassifier_v2/index.html');
 }
 
 app.whenReady().then(createWindow);
