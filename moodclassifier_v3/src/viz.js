@@ -65,8 +65,17 @@ class PlaybackControls {
             backward: document.querySelector('#file-select-area #backward'),
             play: document.querySelector('#file-select-area #play'),
             forward: document.querySelector('#file-select-area #forward'),
-            mute: document.querySelector('#file-select-area #mute')
+            mute: document.querySelector('#file-select-area #mute'),
+            volumeSlider: document.querySelector('#file-select-area #volume-slider')
         };
+
+        // Set initial volume to 30%
+        const defaultVolume = 0.3;
+        this.wavesurfer.setVolume(defaultVolume);
+        this.controls.volumeSlider.value = defaultVolume;
+        
+        // Set initial gradient
+        this.controls.volumeSlider.style.setProperty('--volume-percentage', '30%');
 
         // Set click handlers
         this.controls.backward.onclick = () => {
@@ -91,6 +100,16 @@ class PlaybackControls {
             const isMuted = this.wavesurfer.getVolume() === 0;
             this.wavesurfer.setVolume(isMuted ? 1 : 0);
             this.updateMuteButtonIcon();
+        };
+
+        // Volume slider input handler with gradient update
+        this.controls.volumeSlider.oninput = (event) => {
+            const volume = parseFloat(event.target.value);
+            this.wavesurfer.setVolume(volume);
+            
+            // Update gradient
+            const percentage = volume * 100;
+            event.target.style.setProperty('--volume-percentage', `${percentage}%`);
         };
 
         // Update button text and icon initially

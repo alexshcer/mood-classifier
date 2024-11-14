@@ -18,20 +18,32 @@ let controls;
 
 const dropInput = document.createElement('input');
 dropInput.setAttribute('type', 'file');
+dropInput.style.display = 'none';
+document.body.appendChild(dropInput);
+
 dropInput.addEventListener('change', () => {
     processFileUpload(dropInput.files);
-})
+});
 
 const dropArea = document.querySelector('#file-drop-area');
-dropArea.addEventListener('dragover', (e) => { e.preventDefault() });
-dropArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    processFileUpload(files);
-})
-dropArea.addEventListener('click', () => {
-    dropInput.click();
-})
+
+if (dropArea) {
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        processFileUpload(files);
+    });
+
+    dropArea.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropInput.click();
+    });
+}
 
 let fileLoaded = false; // Track if a file has been loaded
 
@@ -195,13 +207,11 @@ document.getElementById('download-youtube-audio').addEventListener('click', asyn
         return;
     }
 
-    // Check if a file is already loaded
     if (fileLoaded) {
         const userChoice = confirm("A file is already loaded. Would you like to refresh the page to load a new file?");
         if (userChoice) {
-            // Store the URL in localStorage
             localStorage.setItem('youtubeURL', url);
-            location.reload(); // Refresh the page
+            location.reload();
         }
         return;
     }
@@ -211,24 +221,19 @@ document.getElementById('download-youtube-audio').addEventListener('click', asyn
         const filePath = await window.electronAPI.downloadYouTubeAudio(url);
         console.log('Download complete:', filePath);
 
-        // Read the file using the new IPC handler
         const fileBuffer = await window.electronAPI.readAudioFile(filePath);
         console.log('File read into buffer');
 
-        // Create a blob from the buffer
         const fileBlob = new Blob([fileBuffer], { type: 'audio/wav' });
         console.log('File converted to Blob');
 
-        // Create a File object
         const file = new File([fileBlob], 'downloaded-audio.wav', { type: 'audio/wav' });
-        
-        // Remove the drop area and process the file
+
         const dropArea = document.querySelector('#file-drop-area');
         if (dropArea) {
             dropArea.remove();
         }
 
-        // Process the file
         processFileUpload([file]);
         console.log('File sent for processing');
     } catch (error) {
