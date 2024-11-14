@@ -55,17 +55,12 @@ function warmUp() {
 }
 
 async function initTensorflowWASM() {
-    if (tf.getBackend() != 'wasm') {
+    if (tf.getBackend() !== 'wasm') {
         importScripts('./lib/tf-backend-wasm-3.5.0.js');
-        // importScripts('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm/dist/tf-backend-wasm.js');
-        tf.setBackend('wasm');
-        tf.ready().then(() => {
-            console.info('tfjs WASM backend successfully initialized!');
-            initModel();
-        }).catch(() => {
-            console.error(`tfjs WASM could NOT be initialized, defaulting to ${tf.getBackend()}`);
-            return false;
-        });
+        await tf.setBackend('wasm');
+        await tf.ready();
+        console.info('tfjs WASM backend successfully initialized!');
+        initModel();
     }
 }
 

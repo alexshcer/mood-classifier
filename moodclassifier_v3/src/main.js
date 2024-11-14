@@ -33,9 +33,18 @@ dropArea.addEventListener('click', () => {
     dropInput.click();
 })
 
-
+let fileLoaded = false; // Track if a file has been loaded
 
 function processFileUpload(files) {
+    if (fileLoaded) {
+        // Show dialog and refresh option
+        const userChoice = confirm("A file is already loaded. Would you like to refresh the page to load a new file?");
+        if (userChoice) {
+            location.reload(); // Refresh the page
+        }
+        return; // Exit the function
+    }
+
     console.log('Processing file upload:', files);
     if (files.length > 1) {
         alert("Only single-file uploads are supported currently");
@@ -51,6 +60,7 @@ function processFileUpload(files) {
             wavesurfer.loadBlob(file);
             controls = new PlaybackControls(wavesurfer);
             controls.toggleEnabled(false);
+            fileLoaded = true; // Set fileLoaded to true after successful load
         }).catch(error => {
             console.error('Error converting file to ArrayBuffer:', error);
             toggleLoader();
@@ -168,12 +178,31 @@ window.onload = () => {
         essentia = new wasmModule.EssentiaJS(false);
         essentia.arrayToVector = wasmModule.arrayToVector;
     })
+
+    // Retrieve the URL from localStorage and trigger download if it exists
+    const storedURL = localStorage.getItem('youtubeURL');
+    if (storedURL) {
+        document.getElementById('youtube-url').value = storedURL;
+        document.getElementById('download-youtube-audio').click();
+        localStorage.removeItem('youtubeURL'); // Clear the stored URL after use
+    }
 };
 
 document.getElementById('download-youtube-audio').addEventListener('click', async () => {
     const url = document.getElementById('youtube-url').value;
     if (!url) {
         alert('Please enter a YouTube URL.');
+        return;
+    }
+
+    // Check if a file is already loaded
+    if (fileLoaded) {
+        const userChoice = confirm("A file is already loaded. Would you like to refresh the page to load a new file?");
+        if (userChoice) {
+            // Store the URL in localStorage
+            localStorage.setItem('youtubeURL', url);
+            location.reload(); // Refresh the page
+        }
         return;
     }
 
