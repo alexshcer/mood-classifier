@@ -11,7 +11,7 @@
 ## 🎵 Overview
 
 <div align="center">
-  <img src="Screenshot 2024-11-14 at 7.06.17 AM.png" alt="Mood Classifier Interface" width="800"/>
+  <img src="[Screenshot 2024-11-14 at 7.06.17 AM.png](https://raw.githubusercontent.com/alexshcer/mood-classifier/refs/heads/main/Screenshot%202024-11-14%20at%207.06.17%E2%80%AFAM.png)" alt="Mood Classifier Interface" width="800"/>
 </div>
 
 Mood Classifier is a sophisticated desktop application that analyzes music to determine various emotional and rhythmic characteristics. Using advanced deep learning models and audio processing techniques, it provides insights into:
