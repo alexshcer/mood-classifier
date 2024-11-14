@@ -46,17 +46,17 @@ Mood Classifier is a sophisticated desktop application that analyzes music to de
 
 1. Clone the repository
 
-bash
+```bash
 git clone https://github.com/alexshcer/mood-classifier.git
-
+```
 2. Install dependencies
-
+```
 npm install
-
+```
 3. Start the application
-
+```
 npm start
-
+```
 ## 🎯 Usage
 
 1. Launch the application
