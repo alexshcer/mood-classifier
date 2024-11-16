@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Mood Classifier</title>
+        <meta name="description" content="Mood Classifier using Essentia.js and Deep Learning Models">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
+        <link rel="icon" type="image/png" href="icon.png">
+        <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynxLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    </head>
+    <body>
+        <div class="dynamic-background-container">
+            <div class="color-grid"></div>
+        </div>
+        <main id="main">
+            <!-- File Upload Area -->
+            <div id="file-select-area">
+                <div class="ui action input">
+                    <input type="text" id="youtube-url" placeholder="enter the url">
+                    <button class="ui button primary-button" id="download-youtube-audio">
+                        dna
+                    </button>
+                </div>
+                <div id="file-drop-area">
+                    <span>drop here</span>
+                </div>
+            </div>
+
+            <!-- Results Area -->
+            <div id="results">
+                <div id="loader" class="ui disabled dimmer">
+                    <div class="ui indeterminate text loader">
+                        <div class="loader-spinner"></div>
+                        <div class="loader-text">analyzing track...</div>
+                    </div>
+                </div>
+                <div id="danceability" class="classifier">
+                    <span class="emoji">💃🏻</span>
+                    <div class="classifier-meter" data-classifier="danceability">
+                        <span>danceability</span>
+                    </div>
+                </div>
+                <div id="mood_happy" class="classifier">
+                    <span class="emoji">😊</span>
+                    <div class="classifier-meter" data-classifier="happy">
+                        <span>happy</span>
+                    </div>
+                </div>
+                <div id="mood_sad" class="classifier">
+                    <span class="emoji">😢</span>
+                    <div class="classifier-meter" data-classifier="sad">
+                        <span>sad</span>
+                    </div>
+                </div>
+                <div id="mood_relaxed" class="classifier">
+                    <span class="emoji">😌</span>
+                    <div class="classifier-meter" data-classifier="relaxed">
+                        <span>relaxed</span>
+                    </div>
+                </div>
+                <div id="mood_aggressive" class="classifier">
+                    <span class="emoji">😠</span>
+                    <div class="classifier-meter" data-classifier="aggressive">
+                        <span>aggressive</span>
+                    </div>
+                </div>
+                <div id="bpm-and-key">
+                    <div id="bpm" class="row-container">
+                        <div class="tag">bpm: </div>
+                        <div id="bpm-value"></div>
+                    </div>
+                    <div id="key" class="row-container">
+                        <div class="tag">key: </div>
+                        <div id="key-value"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Reset Button -->
+        <button id="reset-app" class="button tiny">
+            <span class="refresh-icon material-icons-round">refresh</span>
+        </button>
+
+        <script src="https://unpkg.com/wavesurfer.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia-wasm.web.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia.js-core.js"></script>
+        <script src="src/main.js" type="module" async defer></script>
+
+        <template id="playback-controls">
+            <div id="controls-container" class="controls">
+                <button id="backward" class="button tiny">
+                    <span class="material-icons-round">fast_rewind</span>
+                </button>
+                <button id="play" class="button tiny primary-button">
+                    <span class="material-icons-round play-icon">play_arrow</span>
+                    <span class="material-icons-round pause-icon" style="display: none;">pause</span>
+                </button>
+                <button id="forward" class="button tiny">
+                    <span class="material-icons-round">fast_forward</span>
+                </button>
+                <button id="mute" class="button tiny wide">
+                    <span class="material-icons-round volume-on">volume_up</span>
+                    <span class="material-icons-round volume-off" style="display: none;">volume_off</span>
+                    <span class="button-text">mute</span>
+                </button>
+            </div>
+            <div id="volume-container" class="volume-container">
+                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="volume-slider">
+            </div>
+            <div id="lyrics-container" class="lyrics-container">
+                <button id="lyrics-button" class="button tiny"> 
+                    <span class="material-icons-round">lyrics</span>
+                    <span class="button-text">Lyrics</span>
+                </button>
+            </div>
+        </template>
+
+        <div id="background" class="background">
+            <div class="lyrics-overlay">
+                <div class="lyrics-header">
+                    <div class="song-title">Easier</div>
+                    <div class="song-artist">BoyWithUke</div>
+                </div>
+                <div class="lyrics-content">
+                    <!-- Lyrics go here -->
+                </div>
+            </div>
+        </div>
+
+        <img id="album-art" src="/Users/air/Desktop/mood-classifier/icon.png" style="display: none;" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/node-vibrant/3.1.6/vibrant.min.js"></script>
+        <script type="module" src="src/viz.js"></script>
+    </body>
+</html>

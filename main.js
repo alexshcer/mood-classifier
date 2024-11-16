@@ -1,9 +1,28 @@
+require('dotenv').config();
+
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const fetch = require('node-fetch');
+const { Client } = require('genius-lyrics');
+const genius = new Client(process.env.GENIUS_ACCESS_TOKEN);
+const axios = require('axios');
+const https = require('https');
 
 // Defer requiring modules until they are needed
 let ytdl, ffmpeg;
+
+// Create a custom axios instance with longer timeout and keep-alive
+const axiosInstance = axios.create({
+  timeout: 30000, // 30 seconds timeout
+  httpsAgent: new https.Agent({ 
+    keepAlive: true,
+    rejectUnauthorized: false // Only if you're having SSL issues
+  }),
+  headers: {
+    'Authorization': `Bearer ${process.env.GENIUS_ACCESS_TOKEN}`
+  }
+});
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -20,7 +39,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('moodclassifier_v3/index.html');
+    win.loadFile('moodclassifier_v4/index.html');
     
     /*
     // Add resize event listener
@@ -67,7 +86,13 @@ ipcMain.handle('download-youtube-audio', async (event, url) => {
             ffmpeg(audioStream)
                 .audioCodec('pcm_s16le')
                 .format('wav')
-                .on('end', () => resolve(filePath))
+                .on('end', () => resolve({
+                    filePath,
+                    videoDetails: {
+                        title: info.videoDetails.title,
+                        author: info.videoDetails.author.name
+                    }
+                }))
                 .on('error', reject)
                 .save(filePath);
         });
@@ -84,6 +109,32 @@ ipcMain.handle('read-audio-file', async (event, filePath) => {
         return buffer;
     } catch (error) {
         console.error('Error reading audio file:', error);
+        throw error;
+    }
+});
+
+async function fetchLyrics(artist, title) {
+    try {
+        const songs = await genius.songs.search(`${title} ${artist}`);
+        if (!songs || songs.length === 0) {
+            throw new Error('No lyrics found');
+        }
+        
+        const lyrics = await songs[0].lyrics();
+        return lyrics;
+    } catch (error) {
+        console.error('Error fetching lyrics:', error);
+        throw error;
+    }
+}
+
+// Update your IPC handler
+ipcMain.handle('get-lyrics', async (event, { artist, title }) => {
+    try {
+        const lyrics = await fetchLyrics(artist, title);
+        return lyrics;
+    } catch (error) {
+        console.error('Error occurred in handler for get-lyrics:', error);
         throw error;
     }
 });
